@@ -6,5 +6,5 @@
     "R": [["L"]]
   },
   "terminals": ["*", "id", "="],
-  "no_terminals": ["S'", "S", "L", "=", "R"]
+  "no_terminals": ["S'", "S", "L", "R"]
 }

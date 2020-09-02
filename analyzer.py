@@ -32,21 +32,16 @@ class Analyzer:
         if drawable_state in self.lr0_states:
             return
 
-        self.lr0.add_states(drawable_state)
+        self.lr0_states.append(drawable_state)
 
     def add_lr0_edge(self, state1, state2, symbol):
         drawable_state1 = self.get_drawable_state(state1)
         drawable_state2 = self.get_drawable_state(state2)
 
-        if (drawable_state1, drawable_state2) in self.lr0_transitions:
+        if (drawable_state1, drawable_state2, symbol) in self.lr0_transitions:
             return
 
-        self.lr0_transitions.append((drawable_state1, drawable_state2))
-        self.lr0.add_transition(
-            trigger=symbol,
-            source=drawable_state1,
-            dest=drawable_state2,
-        )
+        self.lr0_transitions.append((drawable_state1, drawable_state2, symbol))
 
     def generate_lr0_state_from_productions(
         self, state: List[Production]
@@ -76,10 +71,17 @@ class Analyzer:
         ):
             return
 
+        is_analyzed = bool(
+            self.get_drawable_state(current_state) in self.lr0_states
+        )
+
         self.add_lr0_node(current_state)
 
         if len(prev_state) != 0:
             self.add_lr0_edge(prev_state, current_state, symbol)
+
+        if is_analyzed:
+            return
 
         productions_to_analyze: Dict[str, List[Production]] = {}
 
@@ -109,14 +111,24 @@ class Analyzer:
             )
 
     def generate_lr0(self):
+        self.generate_lr0_states([], [self.grammar.productions[0]], "")
+
         initial_state = self.generate_lr0_state_from_productions(
             [self.grammar.productions[0]]
         )
 
         self.lr0 = Machine(
             auto_transitions=False,
-            initial=self.get_drawable_state(initial_state),
+            initial="Estado 0\n" + self.get_drawable_state(initial_state),
             title="LR0",
         )
 
-        self.generate_lr0_states([], [self.grammar.productions[0]], "")
+        for state0, state1, symbol in self.lr0_transitions:
+            state0_index = self.lr0_states.index(state0)
+            state1_index = self.lr0_states.index(state1)
+
+            self.lr0.add_transition(
+                source="Estado " + str(state0_index) + "\n" + state0,
+                dest="Estado " + str(state1_index) + "\n" + state1,
+                trigger=symbol,
+            )

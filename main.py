@@ -2,7 +2,7 @@ from analyzer import Analyzer
 
 # from analyzer2 import Analyzer2
 
-file_name = "grammar_sample_4.json"
+file_name = "grammar_sample_1.json"
 
 
 def main():

@@ -10,6 +10,7 @@ class Production:
         self.next_symbol_index = 0
         self.next_symbol: str = self.symbols[self.next_symbol_index]
         self.prev_symbol: str = ""
+        self.index = 0
 
     def move_to_next_symbol(self):
         if self.is_at_final():
@@ -26,3 +27,17 @@ class Production:
 
     def is_at_final(self):
         return self.next_symbol_index == len(self.symbols)
+
+    def __str__(self):
+        output = self.left + " -> "
+
+        if self.is_at_final():
+            return output + "".join(self.symbols) + "."
+
+        symbols = (
+            "".join(self.symbols[: self.next_symbol_index])
+            + "."
+            + "".join(self.symbols[self.next_symbol_index:])
+        )
+
+        return output + symbols

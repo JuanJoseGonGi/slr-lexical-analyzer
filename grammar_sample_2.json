@@ -1,0 +1,5 @@
+{
+  "productions": { "A'": [["A"]], "A": [["(", "A", ")"], ["a"]] },
+  "terminals": ["a", "(", ")"],
+  "no_terminals": ["A'", "A"]
+}

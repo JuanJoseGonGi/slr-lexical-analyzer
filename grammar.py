@@ -9,6 +9,9 @@ ErrNoNoTerminals = Exception("file does not have no terminals")
 ErrNoNoTerminalProductionLeft = Exception(
     "production left is not in no_terminals"
 )
+ErrSymbolNotDefined = Exception(
+    "symbol is not defined as terminal or no_terminal"
+)
 
 
 class Grammar:
@@ -38,10 +41,16 @@ class Grammar:
             if production_left not in self.no_terminals:
                 raise ErrNoNoTerminalProductionLeft
 
-            for production in productions[production_left]:
-                self.productions.append(
-                    Production(production_left, production)
-                )
+            for symbols in productions[production_left]:
+                for symbol in symbols:
+                    if (
+                        symbol not in self.no_terminals
+                        and symbol not in self.terminals
+                    ):
+                        print("Symbol:" + symbol)
+                        raise ErrSymbolNotDefined
+
+                self.productions.append(Production(production_left, symbols))
 
     def load_from_file(self, file_path: str):
         file = open(file_path)

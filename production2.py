@@ -11,6 +11,7 @@ class Production:
         self.next_symbol_index = 0
         self.next_symbol: str = self.symbols[self.next_symbol_index]
         self.prev_symbol: str = ""
+        self.prediction_set: List[str] = []
         self.index = 0
 
     def move_to_next_symbol(self):
@@ -25,6 +26,24 @@ class Production:
             return
 
         self.next_symbol = self.symbols[self.next_symbol_index]
+
+    def get_prediction_symbol(self, prediction_symbol):
+        if self.is_at_final():
+            raise ErrIsAtFinal
+        
+        prev_symbol = self.prev_symbol
+        next_symbol_index = self.next_symbol_index
+        self.prev_symbol = self.next_symbol
+        self.next_symbol_index = self.next_symbol_index + 1
+
+        if self.is_at_final():
+            self.prev_symbol = prev_symbol
+            self.next_symbol_index = next_symbol_index
+            return ""
+
+        self.prev_symbol = prev_symbol
+        self.next_symbol_index = next_symbol_index
+        return self.symbols[self.next_symbol_index + 1]
 
 
     def is_at_final(self):

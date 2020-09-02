@@ -1,3 +1,4 @@
+from constants import LAMBDA_SYMBOL
 from typing import List
 
 ErrIsAtFinal = Exception("production is already at final")
@@ -26,7 +27,10 @@ class Production:
         self.next_symbol = self.symbols[self.next_symbol_index]
 
     def is_at_final(self):
-        return self.next_symbol_index == len(self.symbols)
+        return (
+            self.next_symbol_index == len(self.symbols)
+            or self.next_symbol == LAMBDA_SYMBOL
+        )
 
     def __str__(self):
         output = self.left + " -> "

@@ -29,7 +29,7 @@ class Analyzer:
     def add_lr0_node(self, state):
         drawable_state = self.get_drawable_state(state)
 
-        if drawable_state in self.lr0_states.values():
+        if drawable_state in self.lr0_states:
             return
 
         self.lr0.add_states(drawable_state)

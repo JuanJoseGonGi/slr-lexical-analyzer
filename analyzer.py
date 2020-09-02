@@ -12,8 +12,14 @@ class Analyzer:
         self.lr1: Machine = None
         self.grammar = Grammar()
 
-    def get_drawable_state(self, state: List[Production]):
+    def get_drawable_state(self, state: List[Production]) -> str:
+        if len(state) == 0:
+            return ""
+
         output = "\n".join([str(produ) for produ in state])
+
+        if state[0].is_at_final():
+            output = "R" + str(state[0].index) + "\n" + output
 
         return output
 
@@ -90,7 +96,7 @@ class Analyzer:
                 continue
 
             production_updated = Production(
-                production.left, production.symbols
+                production.left, production.symbols, production.index
             )
 
             production_updated.next_symbol = production.next_symbol

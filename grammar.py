@@ -37,6 +37,8 @@ class Grammar:
 
         productions: Dict[str, List[List[str]]] = loaded_json["productions"]
 
+        productions_count = 0
+
         for production_left in productions:
             if production_left not in self.no_terminals:
                 raise ErrNoNoTerminalProductionLeft
@@ -50,7 +52,10 @@ class Grammar:
                         print("Symbol:" + symbol)
                         raise ErrSymbolNotDefined
 
-                self.productions.append(Production(production_left, symbols))
+                self.productions.append(
+                    Production(production_left, symbols, productions_count)
+                )
+                productions_count = productions_count + 1
 
     def load_from_file(self, file_path: str):
         file = open(file_path)

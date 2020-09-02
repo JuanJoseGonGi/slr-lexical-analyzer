@@ -5,13 +5,13 @@ ErrIsAtFinal = Exception("production is already at final")
 
 
 class Production:
-    def __init__(self, left: str, symbols: List[str]):
+    def __init__(self, left: str, symbols: List[str], index):
         self.left = left
         self.symbols: List[str] = symbols
         self.next_symbol_index = 0
         self.next_symbol: str = self.symbols[self.next_symbol_index]
         self.prev_symbol: str = ""
-        self.index = 0
+        self.index = index
 
     def move_to_next_symbol(self):
         if self.is_at_final():
@@ -25,7 +25,6 @@ class Production:
             return
 
         self.next_symbol = self.symbols[self.next_symbol_index]
-
 
     def is_at_final(self):
         return (
